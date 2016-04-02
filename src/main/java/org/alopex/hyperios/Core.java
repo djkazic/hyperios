@@ -3,6 +3,7 @@ package org.alopex.hyperios;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.alopex.hyperios.net.api.APIRouter;
 import org.alopex.hyperios.util.GeoUtils;
 
 public class Core {
@@ -11,6 +12,9 @@ public class Core {
 	
 	//TODO: make an invoke method with City var
 	public static void main(String[] args) {
+		System.out.println("Initializing API endpoint...\n");
+		APIRouter.init();
+		
 		System.out.println("Silencing MongoDB debug output...\n");
 		suppressMongoDB();
 		
@@ -19,8 +23,8 @@ public class Core {
 		
 		gutils.doSearch("Hospitals in Boston", "medical");
 		System.out.println();
-		
-		gutils.doSearch("Subways in Boston", "transportation");		
+		gutils.doSearch("Subway stops in Boston", "transportation");
+		System.out.println();
 	}
 	
 	private static void suppressMongoDB() {
