@@ -7,15 +7,20 @@ import org.alopex.hyperios.util.GeoUtils;
 
 public class Core {
 	
+	private static GeoUtils gutils;
+	
 	//TODO: make an invoke method with City var
 	public static void main(String[] args) {
 		System.out.println("Silencing MongoDB debug output...\n");
 		suppressMongoDB();
 		
-		GeoUtils.doSearch("Hospitals in Boston", "medical");
-		GeoUtils.doSearch("Subways in Boston", "transportation");
+		System.out.println("Creating instance of GeoUtils...\n");
+		gutils = new GeoUtils();
 		
-		System.out.println();		
+		gutils.doSearch("Hospitals in Boston", "medical");
+		System.out.println();
+		
+		gutils.doSearch("Subways in Boston", "transportation");		
 	}
 	
 	private static void suppressMongoDB() {

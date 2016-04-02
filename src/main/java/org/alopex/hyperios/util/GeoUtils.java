@@ -13,7 +13,7 @@ public class GeoUtils {
 	
 	private static GooglePlaces client;
 	
-	public static void doSearch(String query, String type) {
+	public void doSearch(String query, String type) {
 		client = new GooglePlaces(Settings.placeApiKey);
 		
 		System.out.println("Searching for [" + query + "]...");
