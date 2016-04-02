@@ -1,4 +1,4 @@
-package org.alopex.hyperios;
+package org.alopex.hyperios.db;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
