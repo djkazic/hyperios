@@ -7,7 +7,7 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.alopex.hyperios.DB;
+import org.alopex.hyperios.db.DB;
 import org.bson.Document;
 
 public class ZIPMongoLoader {

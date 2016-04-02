@@ -2,8 +2,8 @@ package org.alopex.hyperios.util;
 
 import java.util.List;
 
-import org.alopex.hyperios.DB;
 import org.alopex.hyperios.Settings;
+import org.alopex.hyperios.db.DB;
 import org.bson.Document;
 
 import se.walkercrou.places.GooglePlaces;
