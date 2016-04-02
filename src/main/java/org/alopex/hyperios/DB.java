@@ -16,14 +16,11 @@ public class DB {
 	}
 	
 	public static MongoDatabase getDatabase() {
-		if (mongo == null) {
-			mongo = new MongoClient("localhost");
-		}
+		mongo = getMongoClient();
 		
 		if (database == null) {
 			database = mongo.getDatabase("hyperios");
 		}
-		
 		return database;
 	}
 

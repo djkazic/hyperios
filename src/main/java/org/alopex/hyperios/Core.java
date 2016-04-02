@@ -2,6 +2,8 @@ package org.alopex.hyperios;
 
 import java.util.List;
 
+import org.bson.Document;
+
 import se.walkercrou.places.GooglePlaces;
 import se.walkercrou.places.Place;
 
@@ -17,8 +19,11 @@ public class Core {
 		
 		System.out.println("Listing locations:");
 		for (Place place : places) {
-			//Place detailPlace = place.getDetails();
 			System.out.println("\t" + place.getName() + " location: " + place.getAddress());
+			Document poiDoc = new Document("type", "medical")
+								   .append("address", place.getAddress())
+								   .append("density", "-1");
+			DB.getDatabase().getCollection("poi").insertOne(poiDoc);
 		}
 		
 		//TODO: remake client object
