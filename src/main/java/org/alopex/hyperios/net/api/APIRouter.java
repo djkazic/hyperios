@@ -6,8 +6,6 @@ import org.restlet.Application;
 import org.restlet.Component;
 import org.restlet.Restlet;
 import org.restlet.data.Protocol;
-import org.restlet.resource.Get;
-import org.restlet.resource.ServerResource;
 import org.restlet.routing.Router;
 
 public class APIRouter extends Application {
@@ -32,13 +30,5 @@ public class APIRouter extends Application {
 		router.attachDefault(EchoPage.class);
 		// router.attach("/api/sample/count", SampleCount.class);
 		return router;
-	}
-	
-	private class EchoPage extends ServerResource {
-		
-		@Get
-		public String process() {
-			return "Hyperios API v1.0";
-		}
 	}
 }
