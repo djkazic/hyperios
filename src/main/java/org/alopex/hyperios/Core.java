@@ -7,6 +7,7 @@ import org.alopex.hyperios.util.GeoUtils;
 
 public class Core {
 	
+	//TODO: make an invoke method with City var
 	public static void main(String[] args) {
 		System.out.println("Silencing MongoDB debug output...\n");
 		suppressMongoDB();
@@ -18,8 +19,7 @@ public class Core {
 	}
 	
 	private static void suppressMongoDB() {
-		System.setProperty("DEBUG.MONGO", "false");          
-		System.setProperty("DB.TRACE", "false");             
-		Logger.getLogger("com.mongodb").setLevel(Level.OFF);
+		Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
+	    mongoLogger.setLevel(Level.SEVERE); 
 	}
 }
