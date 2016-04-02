@@ -16,7 +16,8 @@ public class Core {
 		Utils.log("Core", "Initializing API endpoint...");
 		APIRouter.init();
 		
-		Utils.log("Core", "\nSilencing MongoDB debug output...\n");
+		System.out.println();
+		Utils.log("Core", "Silencing MongoDB debug output...\n");
 		suppressMongoDB();
 		
 		Utils.log("Core", "Creating instance of GeoUtils...\n");
