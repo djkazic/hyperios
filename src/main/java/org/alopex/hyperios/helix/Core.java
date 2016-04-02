@@ -1,5 +1,4 @@
 package org.alopex.hyperios.helix;
-import java.util.ArrayList;
 
 public class Core {
 	

@@ -23,14 +23,16 @@ public class Core {
 		Utils.log("Core", "Creating instance of GeoUtils...\n");
 		gutils = new GeoUtils();
 		
-		gutils.doSearch("Hospitals in Boston", "medical");
+		//TODO: automated searches to API
+		gutils.googlePlacesSearch("Hospitals in Boston", "medical");
 		System.out.println();
-		gutils.doSearch("Subway stops in Boston", "transportation");
+		gutils.googlePlacesSearch("Subway stops in Boston", "transportation");
 		System.out.println();
 	}
 	
 	private static void suppressMongoDB() {
 		Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
-	    mongoLogger.setLevel(Level.SEVERE); 
+	    mongoLogger.setLevel(Level.SEVERE);
+	    System.err.close();
 	}
 }
