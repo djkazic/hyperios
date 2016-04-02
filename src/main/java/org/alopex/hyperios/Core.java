@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import org.alopex.hyperios.net.api.APIRouter;
 import org.alopex.hyperios.util.GeoUtils;
+import org.alopex.hyperios.util.Utils;
 
 public class Core {
 	
@@ -12,13 +13,13 @@ public class Core {
 	
 	//TODO: make an invoke method with City var
 	public static void main(String[] args) {
-		System.out.println("Initializing API endpoint...\n");
+		Utils.log("Core", "Initializing API endpoint...");
 		APIRouter.init();
 		
-		System.out.println("Silencing MongoDB debug output...\n");
+		Utils.log("Core", "\nSilencing MongoDB debug output...\n");
 		suppressMongoDB();
 		
-		System.out.println("Creating instance of GeoUtils...\n");
+		Utils.log("Core", "Creating instance of GeoUtils...\n");
 		gutils = new GeoUtils();
 		
 		gutils.doSearch("Hospitals in Boston", "medical");
