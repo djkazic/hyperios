@@ -30,11 +30,6 @@
 			<artifactId>mongo-java-driver</artifactId>
 			<version>3.0.4</version>
 		</dependency>
-		<dependency>
-			<groupId>com.factual</groupId>
-			<artifactId>factual-java-driver</artifactId>
-			<version>1.8.8</version>
-		</dependency>
 	</dependencies>
 	<artifactId>hyperios</artifactId>
 </project>
