@@ -1,4 +1,4 @@
-package org.alopex.hyperios.util;
+package org.alopex.hyperios.util.deprecated;
 
 import java.io.BufferedReader;
 import java.io.IOException;
