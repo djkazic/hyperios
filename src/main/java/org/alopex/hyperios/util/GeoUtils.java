@@ -4,13 +4,12 @@ import java.util.List;
 
 import org.alopex.hyperios.APISettings;
 import org.alopex.hyperios.db.DB;
+import org.bson.BsonDocument;
+import org.bson.BsonString;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
-import fi.foyt.foursquare.api.FoursquareApi;
-import fi.foyt.foursquare.api.FoursquareApiException;
-import fi.foyt.foursquare.api.Result;
-import fi.foyt.foursquare.api.entities.CompactVenue;
-import fi.foyt.foursquare.api.entities.VenuesSearchResult;
+import com.mongodb.client.MongoCursor;
 import se.walkercrou.places.GooglePlaces;
 import se.walkercrou.places.Place;
 
@@ -33,12 +32,16 @@ public class GeoUtils {
 				String[] spaceSplit = commaSplit[0].split(" ");
 				if (spaceSplit != null && spaceSplit.length > 1) {
 					if (!address.equals("United States")) {
-						System.out.println("\t" + counter + " " + place.getName() + " location: " + address);
-						Document poiDoc = new Document("type", type)
-								.append("address", address)
-								.append("density", "-1");
-						DB.getDatabase().getCollection("poi").insertOne(poiDoc);
-						counter++;
+						// Passes generic locational check
+						long dupeCheck = DB.getDatabase().getCollection("poi").count(new BsonDocument("address", new BsonString(address)));
+						if (dupeCheck == 0) {
+							Document poiDoc = new Document("type", type)
+								                   .append("address", address)
+							                       .append("density", "-1");
+							System.out.println("\t" + counter + " " + place.getName() + " location: " + address);
+							DB.getDatabase().getCollection("poi").insertOne(poiDoc);
+							counter++;
+						}
 					}
 				}
 			}
