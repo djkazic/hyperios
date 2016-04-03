@@ -10,7 +10,7 @@ public class GACore {
 		Population starter = new Population(GASettings.populationSize, 1);
 		System.out.println("Starter pop: " + starter.printPopulation());
 
-		while (starter.bestSpecimen().getFitness() < 26.5) {
+		while (starter.bestSpecimen().getFitness() < 25) {
 			starter = starter.evolve();
 			System.out.println();
 			System.out.println("Population evolved. " + starter.printPopulation());
