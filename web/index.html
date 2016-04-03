@@ -3,20 +3,34 @@
   <head>
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 	<meta charset="utf-8">
-	<title>Simple markers</title>
+	<title>hyperiOS</title>
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 	<style>
 	  html, body {
 		height: 100%;
 		margin: 0;
 		padding: 0;
+		background-color: #333;
 	  }
 	  #map {
+	  	display: inline-block;
 		height: 100%;
+		width: 85%;
+	  }
+	  #sidebar {
+	  	display: inline-block; 
+	  	width: 14%; 
+	  	float: right; 
+	  	padding-top: 15px; 
+	  	padding-left: 10px;
 	  }
 	</style>
   </head>
   <body>
-	<div id="map"></div>
+  <div id="map"></div>
+  <div id="sidebar">
+  	YAAS QUEEN
+  </div>
 	<script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
 	<script>
 		var map;
