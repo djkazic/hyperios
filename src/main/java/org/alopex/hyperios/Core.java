@@ -44,7 +44,7 @@ public class Core {
 	}
 	
 	public static JSONObject simulate(String city) {
-		//[medical, transportation, power]
+		//[medical, transportation, power, finance]
 		// DEBUG: skip (due to caching)
 		if (!city.contains("Boston")) {
 			// Medical
@@ -58,6 +58,9 @@ public class Core {
 			// Power
 			gutils.googlePlacesSearch("Power plants in " + city, "power");
 			System.out.println();
+			
+			// Finance
+			gutils.googlePlacesSearch("Banks in " + city, "finance");
 		}
 		
 		return GACore.execute();
