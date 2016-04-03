@@ -17,6 +17,7 @@
   </head>
   <body>
 	<div id="map"></div>
+	<script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
 	<script>
 		var map;
 		var geocoder;
@@ -56,21 +57,43 @@
 		}
 
 		function loop() {
-			var addresses = ['Northeastern University', 'Boston College MBTA'];
-			var timeOffset = 3000;
+			var addresses = [];
+			var casualties = [];
 
-			for (var i=0; i < addresses.length; i++) {
-				console.log("Setting timeOut to " + timeOffset);
-				console.log("Address data: " + addresses[i]);
-				setTimeout(geolocate, timeOffset, geocoder, addresses[i], true);
-				timeOffset += 2000;
-			}
+			$.ajax({
+				url: 'http://' + window.location.host + ':8888/api/search',
+				method: 'POST',
+				data: '{"city": "' + home + '"}'
+			}).done(function(result) {
+				var parsedRes = JSON.parse(result);
+				var mixed = parsedRes.value;
 
-			// Increment timeOffset again and re-center at home
-			timeOffset += 1000;
-			setTimeout(geolocate, timeOffset, geocoder, home, false);
-			setTimeout(setMapZoom, timeOffset + 1200, 12);
-			setTimeout(setMapZoom, timeOffset + 1280, 11);
+				for (var i=0; i < 8; i++) {
+					addresses[i] = mixed['poi_' + (i + 1)];
+				}
+				console.log("Addresses: " + addresses.length);
+				correctLocList(addresses);
+				
+				for (var i=0; i < 8; i++) {
+					casualties[i] = mixed['res_' + (i + 1)];
+				}
+				console.log("Casualties: " + casualties.length);
+
+				var timeOffset = 3000;
+
+				for (var i=0; i < addresses.length; i++) {
+					console.log("Setting timeOut to " + timeOffset);
+					console.log("Address data: " + addresses[i]);
+					setTimeout(geolocate, timeOffset, geocoder, addresses[i], true);
+					timeOffset += 2000;
+				}
+
+				// Increment timeOffset again and re-center at home
+				timeOffset += 1000;
+				setTimeout(geolocate, timeOffset, geocoder, home, false);
+				setTimeout(setMapZoom, timeOffset + 1200, 12);
+				setTimeout(setMapZoom, timeOffset + 1280, 11);
+			});	
 		}
 
 		function setMapZoom(zoom) {
@@ -82,12 +105,13 @@
 			  	if (status == google.maps.GeocoderStatus.OK) {
 			  		var zoomLevel = 12;
 			  		if (marker) {
+			  			console.log(results[0].geometry.location);
 			  			var markerLatLng = new google.maps.Marker({
 				  			map: map,
 				  			position: results[0].geometry.location,
 				  			animation: google.maps.Animation.DROP
 				  		});
-				  		console.log(markerLatLng.position);
+				  		//console.log(address + " => " + markerLatLng.position);
 				  		zoomLevel += 4;
 			  		}
 			  		map.panTo(results[0].geometry.location);
@@ -97,6 +121,23 @@
 			  	}
 			});
 		}
+
+		function correctLocList(loclist) {
+			var lng_radius = 0.0003,         // degrees of longitude separation
+			    lat_to_lng = 111.23 / 71.7,  // lat to long proportion in Warsaw
+			    angle = 0.5,                 // starting angle, in radians
+			    loclen = loclist.length,
+			    step = 2 * Math.PI / loclen,
+			    i,
+			    loc,
+			    lat_radius = lng_radius / lat_to_lng;
+			for (i = 0; i < loclen; ++i) {
+			    loc = loclist[i];
+			    loc.lng = loc.lng + (Math.cos(angle) * lng_radius);
+			    loc.lat = loc.lat + (Math.sin(angle) * lat_radius);
+			    angle += step;
+			}
+		};
 	</script>
 
 	<script async defer
