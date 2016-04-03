@@ -273,7 +273,8 @@
 				}
 
 				//TRIGGER API CALL
-				home = place.geometry.location;
+				home = place.formatted_address;
+				console.log(place);
 				setTimeout(loop, 2000);
 
 				var address = '';
