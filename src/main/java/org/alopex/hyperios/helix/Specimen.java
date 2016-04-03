@@ -2,7 +2,7 @@ package org.alopex.hyperios.helix;
 
 public class Specimen {
 
-	private Object[] genes;
+	private Object[] genes; // POI @ odd, RES @ even
 	private double fitness;
 	
 	public Specimen() {
@@ -12,6 +12,11 @@ public class Specimen {
 		for (int i=0; i < genes.length; i++) {
 			//TODO: gene randomization
 			//genes[i] = Core.words[(int) (Math.random() * Core.words.length)];
+			if (i % 2 == 0) {
+				// Get random POI
+			} else {
+				// Get random RES (addl param: count)
+			}
 		}
 	}
 	
