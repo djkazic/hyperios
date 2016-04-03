@@ -30,8 +30,8 @@
 	<script>
 		var map;
 		var geocoder;
+		var totalCasualties = 0;
 		var home = 'Boston, Massachusetts';
-		var totalCasualties = 0; 
 
 		var styles = [
 		    {
@@ -324,23 +324,34 @@
 
 				for (var i=0; i < 8; i++) {
 					casualties[i] = mixed['res_' + (i + 1)];
+					
+					if (casualties[i]) {
+						totalCasualties += parseFloat(casualties[i]);
+						console.log(casualties[i] + " | " + typeof(casualties[i]));
+					}
 				}
 				console.log("Casualties: " + casualties.length);
+				console.log("Total casualties: " + totalCasualties);
 
 				var timeOffset = 3000;
 
 				for (var i=0; i < addresses.length; i++) {
 					console.log("Setting timeOut to " + timeOffset);
 					console.log("Address data: " + addresses[i]);
-					setTimeout(geolocate, timeOffset, geocoder, addresses[i], casualties[i], true);
+					setTimeout(geolocate, timeOffset, geocoder, addresses[i], Math.round(casualties[i]), true);
 					timeOffset += 2000;
 				}
 
 				// Increment timeOffset again and re-center at home
 				timeOffset += 1000;
-				setTimeout(geolocate, timeOffset, geocoder, home, -1, false);
+				//setTimeout(geolocate, timeOffset, geocoder, home, totalCasualties, false);
 				setTimeout(setMapZoom, timeOffset + 1200, 12);
 				setTimeout(setMapZoom, timeOffset + 1280, 11);
+
+				setTimeout(function() {
+					console.log("Workaround executing now.");
+					$('#casualtyCounter').html(Math.round(totalCasualties) + " total casualties");
+				}, timeOffset + 1340);
 			});
 		}
 
@@ -354,11 +365,13 @@
 			  		var zoomLevel = 12;
 			  		if (marker) {
 			  			$('#casualtyContainer').removeClass('hidden');
-			  			if (casualties == -1) {
-			  				$('#casualtyCounter').html(Math.round(totalCasualties) + " casualties");
+			  			if (casualties) {
+			  				$('#casualtyCounter').html(casualties + " casualties");
 			  			} else {
-			  				$('#casualtyCounter').html(Math.round(casualties) + " casualties");
+			  				alert(casualties);
+			  				$('#casualtyCounter').html("Unknown casualties");
 			  			}
+			  			
 						$('#hits').removeClass('hidden');
 						$('#loading').addClass('hidden');
 

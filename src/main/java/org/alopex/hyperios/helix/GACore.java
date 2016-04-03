@@ -41,6 +41,9 @@ public class GACore {
 				casFactor /= ((res.getCost() * res.getCount()) / 50);
 				if (casFactor < 0) {
 					casFactor /= -1;
+				} else if (casFactor > Integer.MAX_VALUE) {
+					casFactor = 3.503;
+					//TODO: catch infinity
 				}
 				System.out.println("casFactor => " + casFactor);
 				
