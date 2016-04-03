@@ -286,13 +286,10 @@
 				}
 
 				//TRIGGER API CALL
-				$('#loading').removeClass('hidden');
 				home = place.formatted_address;
 				console.log(place);
 				setTimeout(loop, 2000);
-				$('#loading').addClass('hidden');
-				$('casualtyContainer').removeClass('hidden');
-				$('hits').removeClass('hidden');
+				$('#loading').removeClass('hidden');
 
 				var address = '';
 				if (place.address_components) {
@@ -319,12 +316,6 @@
 
 				for (var i=0; i < 8; i++) {
 					addresses[i] = mixed['poi_' + (i + 1)];
-
-					var node = document.createElement("LI");
-					var textnode = document.createTextNode('<div><strong>' + place.name + '</strong><br>' + address);
-					node.appendChild(textnode);
-
-					document.getElementById("hitList").appendChild(node);
 				}
 				console.log("Addresses: " + addresses.length);
 				correctLocList(addresses);
@@ -360,15 +351,25 @@
 			  	if (status == google.maps.GeocoderStatus.OK) {
 			  		var zoomLevel = 12;
 			  		if (marker) {
+			  			$('#casualtyContainer').removeClass('hidden');
+						$('#hits').removeClass('hidden');
+						$('#loading').addClass('hidden');
+
 			  			console.log(results[0].geometry.location);
 			  			var markerLatLng = new google.maps.Marker({
 				  			map: map,
 				  			position: results[0].geometry.location,
 				  			animation: google.maps.Animation.DROP
 				  		});
-				  		//console.log(address + " => " + markerLatLng.position);
-				  		zoomLevel += 4;
-			  		}
+
+				  		var node = document.createElement("LI");
+						var textnode = document.createTextNode(address);
+						node.appendChild(textnode);
+
+						document.getElementById("hitList").appendChild(node);
+					  		//console.log(address + " => " + markerLatLng.position);
+					  		zoomLevel += 4;
+				  		}
 			  		map.panTo(results[0].geometry.location);
 			  		map.setZoom(zoomLevel);
 			  	} else {

@@ -1,14 +1,14 @@
 @font-face {
 	font-family: EarthMemory;
-	src: 'Earth+Memory.otf';
+	src: url('Earth+Memory.otf');
 }
 
 html, body {
-	font-family: EarthMemory;
+	font-family: EarthMemory !important;
 	height: 100%;
 	margin: 0;
 	padding: 0;
-	background-color: #333;
+	background-color: #262626;
 }
 
 #map {
@@ -23,10 +23,14 @@ html, body {
 	float: right;
 	padding-top: 15px;
 	padding-left: 10px;
+	overflow: auto;
 }
 
 #loading {
 	background-image: url('loading.gif');
+	background-size: 100% auto;
+	width: 210px;
+	height: 210px;
 }
 
 .panel {
