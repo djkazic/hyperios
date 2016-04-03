@@ -21,9 +21,33 @@
 		var map;
 		var geocoder;
 		var home = 'Boston, Massachusetts';
+		var styles = [
+			{
+			featureType: "all",
+			stylers: [
+			  { saturation: -80 }
+			]
+			},
+			{
+				featureType: "road.arterial",
+				elementType: "geometry",
+				stylers: [
+				  { hue: "#00ffee" },
+				  { saturation: 50 }
+				]
+			},
+			{
+				featureType: "poi.business",
+				elementType: "labels",
+				stylers: [
+				  { visibility: "off" }
+				]
+			}
+		];
 
 		function initMap() {
 			map = new google.maps.Map(document.getElementById('map'));
+			map.setOptions({styles: styles});
 
 			geocoder = new google.maps.Geocoder();
 			geolocate(geocoder, home, false);
