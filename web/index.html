@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+	<meta charset="utf-8">
+	<title>Simple markers</title>
+	<style>
+	  html, body {
+		height: 100%;
+		margin: 0;
+		padding: 0;
+	  }
+	  #map {
+		height: 100%;
+	  }
+	</style>
+  </head>
+  <body>
+	<div id="map"></div>
+	<script>
+		var map;
+		var geocoder;
+		var home = 'Boston, Massachusetts';
+
+		function initMap() {
+			map = new google.maps.Map(document.getElementById('map'));
+
+			geocoder = new google.maps.Geocoder();
+			geolocate(geocoder, home, false);
+
+			setTimeout(loop, 2000);
+		}
+
+		function loop() {
+			var addresses = ['Northeastern University', 'Boston College MBTA'];
+			var timeOffset = 3000;
+
+			for (var i=0; i < addresses.length; i++) {
+				console.log("Setting timeOut to " + timeOffset);
+				console.log("Address data: " + addresses[i]);
+				setTimeout(geolocate, timeOffset, geocoder, addresses[i], true);
+				timeOffset += 2000;
+			}
+
+			// Increment timeOffset again and re-center at home
+			timeOffset += 1000;
+			setTimeout(geolocate, timeOffset, geocoder, home, false);
+			setTimeout(setMapZoom, timeOffset + 1200, 12);
+			setTimeout(setMapZoom, timeOffset + 1280, 11);
+		}
+
+		function setMapZoom(zoom) {
+			map.setZoom(zoom);
+		}
+
+		function geolocate(geocoder, address, marker) {
+			geocoder.geocode({'address': address}, function(results, status) {
+			  	if (status == google.maps.GeocoderStatus.OK) {
+			  		var zoomLevel = 12;
+			  		if (marker) {
+			  			var markerLatLng = new google.maps.Marker({
+				  			map: map,
+				  			position: results[0].geometry.location,
+				  			animation: google.maps.Animation.DROP
+				  		});
+				  		console.log(markerLatLng.position);
+				  		zoomLevel += 4;
+			  		}
+			  		map.panTo(results[0].geometry.location);
+			  		map.setZoom(zoomLevel);
+			  	} else {
+			  		console.log("Maps API error: " + status);
+			  	}
+			});
+		}
+	</script>
+
+	<script async defer
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkj97OzWfnDLGen6ZxETMPEskLkpRAM2I&callback=initMap">
+	</script>
+  </body>
+</html>
