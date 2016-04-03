@@ -28,7 +28,7 @@ public class APIRouter extends Application {
 	public Restlet createInboundRoot() {
 		Router router = new Router(getContext());
 		router.attachDefault(EchoPage.class);
-		// router.attach("/api/sample/count", SampleCount.class);
+		router.attach("/api/search", Search.class);
 		return router;
 	}
 }

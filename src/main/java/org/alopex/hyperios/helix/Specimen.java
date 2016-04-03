@@ -1,5 +1,8 @@
 package org.alopex.hyperios.helix;
 
+import org.alopex.hyperios.helix.optimize.POI;
+import org.alopex.hyperios.helix.optimize.RES;
+
 public class Specimen {
 
 	private Object[] genes; // POI @ odd, RES @ even
@@ -8,26 +11,38 @@ public class Specimen {
 	public Specimen() {
 		genes = new Object[GASettings.genomeSize];
 		
-		// Randomize all the genes
+		// Randomize all genes
 		for (int i=0; i < genes.length; i++) {
-			//TODO: gene randomization
-			//genes[i] = Core.words[(int) (Math.random() * Core.words.length)];
 			if (i % 2 == 0) {
 				// Get random POI
+				genes[i] = new POI();
 			} else {
 				// Get random RES (addl param: count)
+				genes[i] = new RES();
 			}
 		}
 	}
 	
 	public double getFitness() {
-		// Reset fitness and recalculate (can be changed later)
-		fitness = 1;
-		
-		StringBuilder sb = new StringBuilder();
-		for (int i=0; i < genes.length; i++) {
-			sb.append(genes[i]);
+		for (int i=0; i < genes.length - 1; i += 2) {
+			if (i % 2 == 0) {
+				if (genes[i] != null) {
+					// POI
+					POI thisPoi = (POI) genes[i];
+					RES poiRes = (RES) genes[i + 1];
+					double adjustedCountMultiplier = poiRes.getCount() / 2;
+					if (adjustedCountMultiplier == 0) {
+						adjustedCountMultiplier = poiRes.getCount();
+					}
+					double damageRatio = thisPoi.getDensity() * (adjustedCountMultiplier * poiRes.getRadius());
+					double casFactor = ((3 * Math.log(4 * damageRatio)) / 20) * 100;
+					casFactor /= ((poiRes.getCost() * poiRes.getCount()) / 50);
+					fitness = casFactor;
+					return fitness;
+				}
+			}
 		}
+		fitness = -1;
 		return fitness;
 	}
 	
@@ -43,7 +58,13 @@ public class Specimen {
 		for (int i=0; i < genes.length; i++) {
 			if (Math.random() <= GASettings.mutateRate) {
 				// Randomize gene
-				// TODO: gene randomization
+				if (i % 2 == 0) {
+					// Get random POI
+					genes[i] = new POI();
+				} else {
+					// Get random RES (addl param: count)
+					genes[i] = new RES();
+				}
 			}
 		}
 	}

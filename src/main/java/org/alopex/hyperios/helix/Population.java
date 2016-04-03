@@ -1,6 +1,9 @@
 package org.alopex.hyperios.helix;
 import java.util.ArrayList;
 
+import org.alopex.hyperios.helix.optimize.POI;
+import org.alopex.hyperios.helix.optimize.RES;
+
 public class Population {
 	
 	private int generationNumber;
@@ -91,7 +94,17 @@ public class Population {
 	public String printPopulation() {
 		if (this.generationNumber != -1) {
 			String preCursor = "Generation # [" + generationNumber + "], Best = " + this.bestSpecimen().getFitness();
-			
+			Object[] bestSpecDetails = this.bestSpecimen().getGenes();
+			for (Object o : bestSpecDetails) {
+				if (o instanceof POI) {
+					POI poi = (POI) o;
+					System.out.println(poi);
+				} else if (o instanceof RES) {
+					RES res = (RES) o;
+					System.out.println(res);
+				}
+			}
+			System.out.println("==================================================================================\n");
 			return preCursor;
 		} else {
 			return "";

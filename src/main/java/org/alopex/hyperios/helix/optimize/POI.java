@@ -11,7 +11,7 @@ import com.mongodb.client.AggregateIterable;
 public class POI {
 	private String type;
 	private String address;
-	private int density;
+	private double density;
 	
 	public POI() {
 		AggregateIterable<Document> iterable = DB.getDatabase().getCollection("poi").aggregate(Arrays.asList(new Document("$sample", new Document("size", 1))));
@@ -19,7 +19,7 @@ public class POI {
 			public void apply(final Document document) {
 				type = document.getString("type");
 				address = document.getString("address");
-				density = Integer.parseInt(document.getString("density"));
+				density = Double.parseDouble(document.getString("density"));
 			}
 		});
 	}
@@ -28,5 +28,13 @@ public class POI {
 		return "\n\ttype=" + type +
 				"\n\taddr=" + address +
 				"\n\tdensity=" + density;
+	}
+	
+	public double getDensity() {
+		return density;
+	}
+
+	public String getAddress() {
+		return address;
 	}
 }
