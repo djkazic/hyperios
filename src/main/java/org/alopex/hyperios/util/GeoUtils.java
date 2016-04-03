@@ -7,9 +7,7 @@ import org.alopex.hyperios.db.DB;
 import org.bson.BsonDocument;
 import org.bson.BsonString;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 
-import com.mongodb.client.MongoCursor;
 import se.walkercrou.places.GooglePlaces;
 import se.walkercrou.places.Place;
 
@@ -21,9 +19,9 @@ public class GeoUtils {
 		client = new GooglePlaces(APISettings.placeApiKey);
 
 		System.out.println("Searching for [" + query + "]...");
-		List<Place> placesTransport = client.getPlacesByQuery(query, 40);
-		System.out.println("Found " + placesTransport.size() + " results.");
-		System.out.println("Listing locations:");
+		List<Place> placesTransport = client.getPlacesByQuery(query, 45);
+		//System.out.println("Found " + placesTransport.size() + " results.");
+		//System.out.println("Listing locations:");
 		int counter = 1;
 		for (Place place : placesTransport) {
 			String address = place.getAddress();
@@ -32,7 +30,7 @@ public class GeoUtils {
 				String[] spaceSplit = commaSplit[0].split(" ");
 				if (spaceSplit != null && spaceSplit.length > 1) {
 					if (!address.equals("United States")) {
-						// Passes generic locational check
+						// Passes generic location check
 						long dupeCheck = DB.getDatabase().getCollection("poi").count(new BsonDocument("address", new BsonString(address)));
 						if (dupeCheck == 0) {
 							Document poiDoc = new Document("type", type)
