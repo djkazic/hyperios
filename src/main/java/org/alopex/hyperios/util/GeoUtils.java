@@ -19,9 +19,9 @@ public class GeoUtils {
 		client = new GooglePlaces(APISettings.placeApiKey);
 
 		System.out.println("Searching for [" + query + "]...");
-		List<Place> placesTransport = client.getPlacesByQuery(query, 45);
-		//System.out.println("Found " + placesTransport.size() + " results.");
-		//System.out.println("Listing locations:");
+		List<Place> placesTransport = client.getPlacesByQuery(query, 40);
+		// System.out.println("> Found " + placesTransport.size() + " results.");
+		// System.out.println("> Listing locations:");
 		int counter = 1;
 		for (Place place : placesTransport) {
 			String address = place.getAddress();
