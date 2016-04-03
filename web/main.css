@@ -1,4 +1,10 @@
+@font-face {
+	font-family: EarthMemory;
+	src: 'Earth+Memory.otf';
+}
+
 html, body {
+	font-family: EarthMemory;
 	height: 100%;
 	margin: 0;
 	padding: 0;
@@ -8,15 +14,23 @@ html, body {
 #map {
 	display: inline-block;
 	height: 100%;
-	width: 85%;
+	width: 80%;
 }
 
 #sidebar {
-	display: inline-block; 
-	width: 14%; 
-	float: right; 
-	padding-top: 15px; 
+	display: inline-block;
+	width: 19%;
+	float: right;
+	padding-top: 15px;
 	padding-left: 10px;
+}
+
+#loading {
+	background-image: url('loading.gif');
+}
+
+.panel {
+	width: 90%;
 }
 
 .controls {

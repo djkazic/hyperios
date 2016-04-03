@@ -11,7 +11,20 @@
   <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
   <div id="map"></div>
   <div id="sidebar">
-  	YAAS QUEEN
+  	<div class='panel panel-default'>
+  		<div class='panel-heading'> <h3 id='title'>Hyperios</h3> </div>
+  	</div>
+  	<div id='loading' class='hidden'></div>
+  	<div class='panel panel-danger hidden' id='casualtyContainer'>
+  		<div class='panel-heading'> <h3 id='casualtyCounter'>10,000 casualties</h3> </div>
+  	</div>
+  	<div class='panel panel-danger hidden' id='hits'>
+  		<div class='panel-heading'> <h3>Hit Sites</h3> </div>
+  		<div class='panel-body'>
+  			<ul id='hitList'>
+  			</ul>
+  		</div>
+  	</div>
   </div>
 	<script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
 	<script>
@@ -273,9 +286,13 @@
 				}
 
 				//TRIGGER API CALL
+				$('#loading').removeClass('hidden');
 				home = place.formatted_address;
 				console.log(place);
 				setTimeout(loop, 2000);
+				$('#loading').addClass('hidden');
+				$('casualtyContainer').removeClass('hidden');
+				$('hits').removeClass('hidden');
 
 				var address = '';
 				if (place.address_components) {
@@ -285,8 +302,6 @@
 					  (place.address_components[2] && place.address_components[2].short_name || '')
 					].join(' ');
 				}
-
-				infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
 			});
 		}
 
@@ -304,10 +319,16 @@
 
 				for (var i=0; i < 8; i++) {
 					addresses[i] = mixed['poi_' + (i + 1)];
+
+					var node = document.createElement("LI");
+					var textnode = document.createTextNode('<div><strong>' + place.name + '</strong><br>' + address);
+					node.appendChild(textnode);
+
+					document.getElementById("hitList").appendChild(node);
 				}
 				console.log("Addresses: " + addresses.length);
 				correctLocList(addresses);
-				
+
 				for (var i=0; i < 8; i++) {
 					casualties[i] = mixed['res_' + (i + 1)];
 				}
@@ -327,7 +348,7 @@
 				setTimeout(geolocate, timeOffset, geocoder, home, false);
 				setTimeout(setMapZoom, timeOffset + 1200, 12);
 				setTimeout(setMapZoom, timeOffset + 1280, 11);
-			});	
+			});
 		}
 
 		function setMapZoom(zoom) {
