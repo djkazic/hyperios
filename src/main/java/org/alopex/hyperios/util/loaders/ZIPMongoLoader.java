@@ -1,13 +1,15 @@
-package org.alopex.hyperios.util.deprecated;
+package org.alopex.hyperios.util.loaders;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.alopex.hyperios.db.DB;
+import org.alopex.hyperios.util.Utils;
+import org.bson.BsonDocument;
+import org.bson.BsonString;
 import org.bson.Document;
 
 public class ZIPMongoLoader {
@@ -15,20 +17,32 @@ public class ZIPMongoLoader {
 	private static URL apiUrl;
 	
 	// Single class implementation to inject ZIP code => population density mappings
-	public static void main(String[] args) throws IOException {
-		for (int i=2108; i < 2467; i++) {
-			String numStr = String.format("%05d", i);
-			System.out.println("Attempting to cache " + numStr);
-			String density = zipToDensity(numStr);
-			if (density != null) {
-				System.out.println("\tPASS: " + density);
-				Document densityDoc = new Document("zip", "" + numStr)
-										   .append("density", density);
-				System.out.println("\t" + densityDoc);
-				DB.getDatabase().getCollection("density").insertOne(densityDoc);
-			} else {
-				System.out.println("\tFAIL");
+	public static void execute() {
+		Utils.log("ZipMongoLoader", "Setting timeout global var...");
+		System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
+		System.setProperty("sun.net.client.defaultReadTimeout", "10000");
+		try {
+			for (int i=2108; i < 2467; i++) {
+				String numStr = String.format("%05d", i);
+				long dupeCheck = DB.getDatabase().getCollection("density").count(new BsonDocument("zip", new BsonString(numStr)));
+				if (dupeCheck == 0) {
+					String density = zipToDensity(numStr);
+					if (density != null) {
+						System.out.println("Attempting to cache " + numStr);
+						System.out.println("\t" + numStr+ " Passed: " + density);
+						Document densityDoc = new Document("zip", "" + numStr)
+												   .append("density", density);
+						System.out.println("\t" + densityDoc + "\n");
+						DB.getDatabase().getCollection("density").insertOne(densityDoc);	
+					} else {
+						System.out.println("\t" + numStr + " Failed");
+					}
+				} else {
+					System.out.println("\tSkipping " + numStr);
+				}
 			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 	}
 	
