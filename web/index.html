@@ -5,28 +5,10 @@
 	<meta charset="utf-8">
 	<title>hyperiOS</title>
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-	<style>
-	  html, body {
-		height: 100%;
-		margin: 0;
-		padding: 0;
-		background-color: #333;
-	  }
-	  #map {
-	  	display: inline-block;
-		height: 100%;
-		width: 85%;
-	  }
-	  #sidebar {
-	  	display: inline-block; 
-	  	width: 14%; 
-	  	float: right; 
-	  	padding-top: 15px; 
-	  	padding-left: 10px;
-	  }
-	</style>
+	<link rel="stylesheet" type="text/css" href="main.css">
   </head>
   <body>
+  <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
   <div id="map"></div>
   <div id="sidebar">
   	YAAS QUEEN
@@ -259,7 +241,52 @@
 			geocoder = new google.maps.Geocoder();
 			geolocate(geocoder, home, false);
 
-			setTimeout(loop, 2000);
+			searchBar();
+		}
+
+		function searchBar() {
+			var input = /** @type {!HTMLInputElement} */(
+			document.getElementById('pac-input'));
+
+			var types = document.getElementById('type-selector');
+			map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+			var autocomplete = new google.maps.places.Autocomplete(input);
+			autocomplete.bindTo('bounds', map);
+
+			var infowindow = new google.maps.InfoWindow();
+
+			autocomplete.addListener('place_changed', function() {
+				infowindow.close();
+				var place = autocomplete.getPlace();
+				if (!place.geometry) {
+					window.alert("Autocomplete's returned place contains no geometry");
+					return;
+				}
+
+				// If the place has a geometry, then present it on a map.
+				if (place.geometry.viewport) {
+					map.fitBounds(place.geometry.viewport);
+				} else {
+					map.setCenter(place.geometry.location);
+					map.setZoom(14);
+				}
+
+				//TRIGGER API CALL
+				home = place.geometry.location;
+				setTimeout(loop, 2000);
+
+				var address = '';
+				if (place.address_components) {
+					address = [
+					  (place.address_components[0] && place.address_components[0].short_name || ''),
+					  (place.address_components[1] && place.address_components[1].short_name || ''),
+					  (place.address_components[2] && place.address_components[2].short_name || '')
+					].join(' ');
+				}
+
+				infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+			});
 		}
 
 		function loop() {
@@ -347,7 +374,7 @@
 	</script>
 
 	<script async defer
-	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkj97OzWfnDLGen6ZxETMPEskLkpRAM2I&callback=initMap">
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkj97OzWfnDLGen6ZxETMPEskLkpRAM2I&callback=initMap&libraries=places">
 	</script>
   </body>
 </html>
