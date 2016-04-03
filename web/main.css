@@ -24,13 +24,16 @@ html, body {
 	padding-top: 15px;
 	padding-left: 10px;
 	overflow: auto;
+	text-align: center;
 }
 
 #loading {
+	display: block;
 	background-image: url('loading.gif');
 	background-size: 100% auto;
-	width: 210px;
-	height: 210px;
+	width: 180px;
+	height: 180px;
+	text-align: center;
 }
 
 .panel {
