@@ -3,6 +3,7 @@ import java.util.ArrayList;
 
 import org.alopex.hyperios.helix.optimize.POI;
 import org.alopex.hyperios.helix.optimize.RES;
+import org.alopex.hyperios.util.Utils;
 
 public class Population {
 	
@@ -19,25 +20,36 @@ public class Population {
 
 	public Population evolve() {		
 		// Create new Population
-		Population newPop = new Population(GASettings.populationSize, this.generationNumber + 1);
+		Utils.log(this, "> Creating evolved population");
+		final Population newPop = new Population(GASettings.populationSize, this.generationNumber + 1);
 		
 		// Keep our best individual
+		Utils.log(this, "> Activating elitism");
 		newPop.addSpecimen(this.bestSpecimen());
 		
+		Utils.log(this, "> Crossing over [experimental multithreaded]");
 		// Crossover population
+		final Population origin = this;
 		for (int i=1; i < size; i++) {
-			Specimen mateOne = this.tournamentSelect();
-			Specimen mateTwo = this.tournamentSelect();
+			Utils.log(this, "\t> Crossover selection " + i);
+			(new Thread(new Runnable() {
+				public void run() {
+					Specimen mateOne = origin.tournamentSelect();
+					Specimen mateTwo = origin.tournamentSelect();
 
-			Specimen newSpec = crossover(mateOne, mateTwo);
-			newPop.addSpecimen(newSpec);
+					Specimen newSpec = crossover(mateOne, mateTwo);
+					newPop.addSpecimen(newSpec);
+				}
+			})).start();
 		}
 		
+		Utils.log(this, "> Mutating");
 		// Mutate population
 		for (int i=0; i < newPop.size; i++) {
 			newPop.getSpecimen(i).testMutate();
 		}
 		
+		Utils.log(this, "* Evolution complete");
 		return newPop;
 	}
 	

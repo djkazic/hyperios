@@ -13,15 +13,19 @@ public class POI {
 	private String address;
 	private double density;
 	
-	public POI() {
-		AggregateIterable<Document> iterable = DB.getDatabase().getCollection("poi").aggregate(Arrays.asList(new Document("$sample", new Document("size", 1))));
-		iterable.forEach(new Block<Document> () {
-			public void apply(final Document document) {
-				type = document.getString("type");
-				address = document.getString("address");
-				density = Double.parseDouble(document.getString("density"));
-			}
-		});
+	public POI () {}
+	
+	public POI(boolean randomize) {
+		if (randomize) {
+			AggregateIterable<Document> iterable = DB.getDatabase().getCollection("poi").aggregate(Arrays.asList(new Document("$sample", new Document("size", 1))));
+			iterable.forEach(new Block<Document> () {
+				public void apply(final Document document) {
+					type = document.getString("type");
+					address = document.getString("address");
+					density = Double.parseDouble(document.getString("density"));
+				}
+			});
+		}
 	}
 	
 	public String toString() {
@@ -36,5 +40,9 @@ public class POI {
 
 	public String getAddress() {
 		return address;
+	}
+
+	public void setDensity(int in) {
+		density = 1;
 	}
 }

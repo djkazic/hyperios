@@ -22,6 +22,7 @@ public class Search extends ServerResource {
 						if (city.equals("")) {
 							responseJSON.put("error", "City not specified");
 						} else {
+							Utils.log(this, "Search API invoked");
 							responseJSON.put("value", Core.simulate(city));
 						}
 					} catch (Exception ex) {

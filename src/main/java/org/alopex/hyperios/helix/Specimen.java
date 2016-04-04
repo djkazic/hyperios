@@ -15,10 +15,10 @@ public class Specimen {
 		for (int i=0; i < genes.length; i++) {
 			if (i % 2 == 0) {
 				// Get random POI
-				genes[i] = new POI();
+				genes[i] = new POI(true);
 			} else {
 				// Get random RES (addl param: count)
-				genes[i] = new RES();
+				genes[i] = new RES(true);
 			}
 		}
 	}
@@ -60,10 +60,10 @@ public class Specimen {
 				// Randomize gene
 				if (i % 2 == 0) {
 					// Get random POI
-					genes[i] = new POI();
+					genes[i] = new POI(true);
 				} else {
 					// Get random RES (addl param: count)
-					genes[i] = new RES();
+					genes[i] = new RES(true);
 				}
 			}
 		}

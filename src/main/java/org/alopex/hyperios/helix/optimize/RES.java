@@ -14,16 +14,18 @@ public class RES {
 	private double radius;
 	private int count; // Optimized flag, randomize
 	
-	public RES() {
-		AggregateIterable<Document> iterable = DB.getDatabase().getCollection("res").aggregate(Arrays.asList(new Document("$sample", new Document("size", 1))));
-		iterable.forEach(new Block<Document> () {
-			public void apply(final Document document) {
-				name = document.getString("name");
-				cost = Double.parseDouble(document.getString("cost"));
-				radius = Double.parseDouble(document.getString("radius"));
-				count = (int) (Math.random() * 10) + 1;
-			}
-		});
+	public RES(boolean randomize) {
+		if (randomize) {
+			AggregateIterable<Document> iterable = DB.getDatabase().getCollection("res").aggregate(Arrays.asList(new Document("$sample", new Document("size", 1))));
+			iterable.forEach(new Block<Document> () {
+				public void apply(final Document document) {
+					name = document.getString("name");
+					cost = Double.parseDouble(document.getString("cost"));
+					radius = Double.parseDouble(document.getString("radius"));
+					count = (int) (Math.random() * 10) + 1;
+				}
+			});
+		}
 	}
 	
 	public String toString() {
@@ -43,5 +45,9 @@ public class RES {
 	
 	public int getCount() {
 		return count;
+	}
+
+	public void setCount(int in) {
+		count = in;
 	}
 }
