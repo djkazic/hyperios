@@ -309,7 +309,7 @@
 			var casualties = [];
 
 			$.ajax({
-				url: 'http://' + window.location.host + ':8888/api/search',
+				url: 'http://api.' + window.location.host + ':8888/api/search',
 				method: 'POST',
 				data: '{"city": "' + home + '"}'
 			}).done(function(result) {
@@ -327,7 +327,6 @@
 					
 					if (casualties[i]) {
 						totalCasualties += parseFloat(casualties[i]);
-						console.log(casualties[i] + " | " + typeof(casualties[i]));
 					}
 				}
 				console.log("Casualties: " + casualties.length);
@@ -342,16 +341,11 @@
 					timeOffset += 2000;
 				}
 
-				// Increment timeOffset again and re-center at home
-				timeOffset += 1000;
-				//setTimeout(geolocate, timeOffset, geocoder, home, totalCasualties, false);
+				// Re-center
+				timeOffset += 500;
+				setTimeout(geolocate, timeOffset, geocoder, home, -1, false);
 				setTimeout(setMapZoom, timeOffset + 1200, 12);
 				setTimeout(setMapZoom, timeOffset + 1280, 11);
-
-				setTimeout(function() {
-					console.log("Workaround executing now.");
-					$('#casualtyCounter').html(Math.round(totalCasualties) + " total casualties");
-				}, timeOffset + 1340);
 			});
 		}
 
@@ -360,13 +354,17 @@
 		}
 
 		function geolocate(geocoder, address, casualties, marker) {
+			if (casualties == -1) {
+				console.log("Setting total casualties");
+				$('#casualtyCounter').html(Math.round(totalCasualties) + " total casualties");
+			}
 			geocoder.geocode({'address': address}, function(results, status) {
 			  	if (status == google.maps.GeocoderStatus.OK) {
 			  		var zoomLevel = 12;
 			  		if (marker) {
 			  			$('#casualtyContainer').removeClass('hidden');
 			  			if (casualties) {
-			  				$('#casualtyCounter').html(casualties + " casualties");
+							$('#casualtyCounter').html(casualties + " casualties");
 			  			} else {
 			  				$('#casualtyCounter').html("Unknown casualties");
 			  			}
