@@ -11,17 +11,17 @@ public class Population {
 	private final int size;
 	private ArrayList<Specimen> specimen;
 	
-	public Population(int size, int generationNumber) {
+	public Population(int size, int generationNumber, boolean requireSpecimen) {
 		this.size = size;
 		this.generationNumber = generationNumber;
 		this.specimen = new ArrayList<Specimen> (size);
-		randomizeSpecimen();
+		randomizeSpecimen(requireSpecimen);
 	}
 
 	public Population evolve() {		
 		// Create new Population
 		Utils.log(this, "> Creating evolved population");
-		final Population newPop = new Population(GASettings.populationSize, this.generationNumber + 1);
+		final Population newPop = new Population(GASettings.populationSize, this.generationNumber + 1, false);
 		
 		// Keep our best individual
 		Utils.log(this, "> Activating elitism");
@@ -32,15 +32,11 @@ public class Population {
 		final Population origin = this;
 		for (int i=1; i < size; i++) {
 			Utils.log(this, "\t> Crossover selection " + i);
-			(new Thread(new Runnable() {
-				public void run() {
-					Specimen mateOne = origin.tournamentSelect();
-					Specimen mateTwo = origin.tournamentSelect();
+			Specimen mateOne = origin.tournamentSelect();
+			Specimen mateTwo = origin.tournamentSelect();
 
-					Specimen newSpec = crossover(mateOne, mateTwo);
-					newPop.addSpecimen(newSpec);
-				}
-			})).start();
+			Specimen newSpec = crossover(mateOne, mateTwo);
+			newPop.addSpecimen(newSpec);
 		}
 		
 		Utils.log(this, "> Mutating");
@@ -70,7 +66,7 @@ public class Population {
 	}
 	
 	public Specimen tournamentSelect() {
-		Population tournamentPop = new Population((int) (GASettings.populationSize * GASettings.tournamentRatio), -1);
+		Population tournamentPop = new Population((int) (GASettings.populationSize * GASettings.tournamentRatio), -1, false);
 		// For each place in the tournament get a random individual
 		for (int i=0; i < tournamentPop.size; i++) {
 			tournamentPop.addSpecimen(this.getSpecimen((int) (Math.random() * this.size)));
@@ -81,7 +77,7 @@ public class Population {
 	}
 	
 	public Specimen crossover(Specimen mateOne, Specimen mateTwo) {
-		Specimen output = new Specimen();
+		Specimen output = new Specimen(true);
 		//System.out.println("Output gene length: " + output.getGenes().length);
 		for (int i=0; i < output.getGenes().length; i++) {
 			if (Math.random() <= GASettings.crossoverRate) {
@@ -93,13 +89,19 @@ public class Population {
 		return output;
 	}
 	
+	public int getGeneration() {
+		return generationNumber;
+	}
+	
 	public Specimen getSpecimen(int index) {
 		return specimen.get(index);
 	}
 	
-	public void randomizeSpecimen() {
-		for (int i=0; i < size; i++) {
-			specimen.add(new Specimen());
+	public void randomizeSpecimen(boolean pullFromDB) {
+		if (pullFromDB) {
+			for (int i=0; i < size; i++) {
+				specimen.add(new Specimen(false));
+			}
 		}
 	}
 	

@@ -8,17 +8,19 @@ public class Specimen {
 	private Object[] genes; // POI @ odd, RES @ even
 	private double fitness;
 	
-	public Specimen() {
+	public Specimen(boolean isCrossover) {
 		genes = new Object[GASettings.genomeSize];
 		
-		// Randomize all genes
-		for (int i=0; i < genes.length; i++) {
-			if (i % 2 == 0) {
-				// Get random POI
-				genes[i] = new POI(true);
-			} else {
-				// Get random RES (addl param: count)
-				genes[i] = new RES(true);
+		if (!isCrossover) {
+			// Randomize all genes
+			for (int i=0; i < genes.length; i++) {
+				if (i % 2 == 0) {
+					// Get random POI
+					genes[i] = new POI(true);
+				} else {
+					// Get random RES (addl param: count)
+					genes[i] = new RES(true);
+				}
 			}
 		}
 	}

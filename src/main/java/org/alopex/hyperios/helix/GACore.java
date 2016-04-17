@@ -8,10 +8,11 @@ import org.json.JSONObject;
 public class GACore {
 	
 	public static JSONObject execute() {
-		Population starter = new Population(GASettings.populationSize, 1);
+		Population starter = new Population(GASettings.populationSize, 1, true);
 		System.out.println("Starter pop: " + starter.printPopulation());
 
-		while (starter.bestSpecimen().getFitness() < 25) {
+		//while (starter.bestSpecimen().getFitness() < 25) {
+		while (starter.getGeneration() < 25) {
 			starter = starter.evolve();
 			System.out.println();
 			System.out.println("Population evolved. " + starter.printPopulation());

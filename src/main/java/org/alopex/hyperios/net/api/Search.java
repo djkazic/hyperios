@@ -26,8 +26,10 @@ public class Search extends ServerResource {
 							responseJSON.put("value", Core.simulate(city));
 						}
 					} catch (Exception ex) {
-						Utils.log(this, "Search API error: " + ex.getMessage());
+						Utils.log(this, "Inner search API error: " + ex.getMessage());
 						responseJSON.put("error", ex.getMessage());
+						Utils.log(this, "Printing stack trace:");
+						ex.printStackTrace();
 					}
 				} catch (Exception ex) {
 					Utils.log(this, "Outer executive error: " + ex.getMessage());
@@ -35,7 +37,7 @@ public class Search extends ServerResource {
 				}
 			}
 		} catch (Exception ex) {
-			Utils.log(this, "Search API error: " + ex.getMessage());
+			Utils.log(this, "Outer search API error: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		return responseJSON.toString();
